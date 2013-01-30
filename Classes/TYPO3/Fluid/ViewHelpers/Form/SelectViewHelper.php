@@ -115,6 +115,7 @@ class SelectViewHelper extends \TYPO3\Fluid\ViewHelpers\Form\AbstractFormFieldVi
 		$this->registerArgument('selectAllByDefault', 'boolean', 'If specified options are selected if none was set before.', FALSE, FALSE);
 		$this->registerArgument('errorClass', 'string', 'CSS class to set if there are errors for this view helper', FALSE, 'f3-form-error');
 		$this->registerArgument('translate', 'array', 'Configures translation of view helper output.');
+		$this->registerArgument('prependOption', 'string', 'If specified an extra option is prepended with the given string as label.');
 	}
 
 	/**
@@ -219,6 +220,11 @@ class SelectViewHelper extends \TYPO3\Fluid\ViewHelpers\Form\AbstractFormFieldVi
 		if ($this->arguments['sortByOptionLabel']) {
 			asort($options);
 		}
+
+		if(isset($this->arguments['prependOption'])){
+			$options = array('' => $this->arguments['prependOption']) + $options;
+		}
+
 		return $options;
 	}
 
