@@ -21,7 +21,7 @@ require_once(__DIR__ . '/FormFieldViewHelperBaseTestcase.php');
 class SelectViewHelperTest extends \TYPO3\Fluid\Tests\Unit\ViewHelpers\Form\FormFieldViewHelperBaseTestcase {
 
 	/**
-	 * var \TYPO3\Fluid\ViewHelpers\Form\SelectViewHelper
+	 * @var \TYPO3\Fluid\ViewHelpers\Form\SelectViewHelper
 	 */
 	protected $viewHelper;
 
@@ -268,7 +268,6 @@ class SelectViewHelperTest extends \TYPO3\Fluid\Tests\Unit\ViewHelpers\Form\Form
 		$this->assertSame($expected, $actual);
 	}
 
-
 	/**
 	 * @test
 	 */
@@ -435,7 +434,6 @@ class SelectViewHelperTest extends \TYPO3\Fluid\Tests\Unit\ViewHelpers\Form\Form
 		$this->viewHelper->_call('getTranslatedLabel', 'value1', 'label1');
 	}
 
-
 	/**
 	 * @test
 	 */
@@ -475,5 +473,68 @@ class SelectViewHelperTest extends \TYPO3\Fluid\Tests\Unit\ViewHelpers\Form\Form
 		$this->viewHelper->_call('getTranslatedLabel', 'value1', 'label1');
 	}
 
+	/**
+	 * @test
+	 */
+	public function optionsContainPrependedItemWithEmptyValueIfPrependOptionLabelIsSet() {
+		$this->tagBuilder->expects($this->once())->method('addAttribute')->with('name', 'myName');
+		$this->viewHelper->expects($this->once())->method('registerFieldNameForFormTokenGeneration')->with('myName');
+		$this->tagBuilder->expects($this->once())->method('setContent')->with('<option value="">please choose</option>' . chr(10) . '<option value="value1">label1</option>' . chr(10) . '<option value="value2">label2</option>' . chr(10) . '<option value="value3">label3</option>' . chr(10));
+		$this->tagBuilder->expects($this->once())->method('render');
+		$this->arguments['options'] = array(
+			'value1' => 'label1',
+			'value2' => 'label2',
+			'value3' => 'label3'
+		);
+		$this->arguments['name'] = 'myName';
+		$this->arguments['prependOptionLabel'] = 'please choose';
+		$this->injectDependenciesIntoViewHelper($this->viewHelper);
+		$this->viewHelper->initialize();
+		$this->viewHelper->render();
+	}
+
+	/**
+	 * @test
+	 */
+	public function optionsContainPrependedItemWithCorrectValueIfPrependOptionLabelAndPrependOptionValueAreSet() {
+		$this->tagBuilder->expects($this->once())->method('addAttribute')->with('name', 'myName');
+		$this->viewHelper->expects($this->once())->method('registerFieldNameForFormTokenGeneration')->with('myName');
+		$this->tagBuilder->expects($this->once())->method('setContent')->with('<option value="-1">please choose</option>' . chr(10) . '<option value="value1">label1</option>' . chr(10) . '<option value="value2">label2</option>' . chr(10) . '<option value="value3">label3</option>' . chr(10));
+		$this->tagBuilder->expects($this->once())->method('render');
+		$this->arguments['options'] = array(
+			'value1' => 'label1',
+			'value2' => 'label2',
+			'value3' => 'label3'
+		);
+		$this->arguments['name'] = 'myName';
+		$this->arguments['prependOptionLabel'] = 'please choose';
+		$this->arguments['prependOptionValue'] = '-1';
+		$this->injectDependenciesIntoViewHelper($this->viewHelper);
+		$this->viewHelper->initialize();
+		$this->viewHelper->render();
+	}
+
+	/**
+	 * @test
+	 */
+	public function prependedOptionLabelIsTranslatedIfTranslateArgumentIsSet() {
+		$this->tagBuilder->expects($this->once())->method('addAttribute')->with('name', 'myName');
+		$this->viewHelper->expects($this->once())->method('registerFieldNameForFormTokenGeneration')->with('myName');
+		$this->tagBuilder->expects($this->once())->method('setContent')->with('<option value="">translated label</option>' . chr(10));
+		$this->tagBuilder->expects($this->once())->method('render');
+		$this->arguments['options'] = array();
+		$this->arguments['name'] = 'myName';
+		$this->arguments['prependOptionLabel'] = 'select';
+		$this->arguments['translate'] = array('by' => 'id', 'using' => 'label');
+
+		$mockTranslator = $this->getMock('TYPO3\Flow\I18n\Translator');
+		$mockTranslator->expects($this->at(0))->method('translateById')->with('select', array(), NULL, NULL, 'Main', '')->will($this->returnValue('translated label'));
+		$this->viewHelper->_set('translator', $mockTranslator);
+
+		$this->injectDependenciesIntoViewHelper($this->viewHelper);
+		$this->viewHelper->initialize();
+		$this->viewHelper->render();
+	}
 }
+
 ?>

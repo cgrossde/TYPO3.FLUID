@@ -17,8 +17,8 @@ namespace TYPO3\Fluid\Core\Parser;
  */
 class TemplateParser {
 
-	public static $SCAN_PATTERN_NAMESPACEDECLARATION = '/(?<!\\\\){namespace\s*(?P<identifier>[a-zA-Z]+[a-zA-Z0-9]*)\s*=\s*(?P<phpNamespace>(?:[A-Za-z0-9\.]+|Tx)(?:FLUID_NAMESPACE_SEPARATOR\w+)+)\s*}/m';
-	public static $SCAN_PATTERN_XMLNSDECLARATION = '/\sxmlns:(?P<identifier>.*?)="(?P<xmlNamespace>.*?)"/m';
+	static public $SCAN_PATTERN_NAMESPACEDECLARATION = '/(?<!\\\\){namespace\s*(?P<identifier>[a-zA-Z]+[a-zA-Z0-9]*)\s*=\s*(?P<phpNamespace>(?:[A-Za-z0-9\.]+|Tx)(?:FLUID_NAMESPACE_SEPARATOR\w+)+)\s*}/m';
+	static public $SCAN_PATTERN_XMLNSDECLARATION = '/\sxmlns:(?P<identifier>.*?)="(?P<xmlNamespace>.*?)"/m';
 
 	/**
 	 * The following two constants are used for tracking whether we are currently
@@ -33,7 +33,7 @@ class TemplateParser {
 	 * on all <![CDATA[...]]> sections.
 	 *
 	 */
-	public static $SPLIT_PATTERN_TEMPLATE_DYNAMICTAGS = '/
+	static public $SPLIT_PATTERN_TEMPLATE_DYNAMICTAGS = '/
 		(
 			(?: <\/?                                      # Start dynamic tags
 					(?:(?:NAMESPACE):[a-zA-Z0-9\\.]+)     # A tag consists of the namespace prefix and word characters
@@ -57,7 +57,7 @@ class TemplateParser {
 	 * This regular expression scans if the input string is a ViewHelper tag
 	 *
 	 */
-	public static $SCAN_PATTERN_TEMPLATE_VIEWHELPERTAG = '/
+	static public $SCAN_PATTERN_TEMPLATE_VIEWHELPERTAG = '/
 		^<                                                # A Tag begins with <
 		(?P<NamespaceIdentifier>NAMESPACE):               # Then comes the Namespace prefix followed by a :
 		(?P<MethodIdentifier>                             # Now comes the Name of the ViewHelper
@@ -84,13 +84,13 @@ class TemplateParser {
 	 * tag.
 	 *
 	 */
-	public static $SCAN_PATTERN_TEMPLATE_CLOSINGVIEWHELPERTAG = '/^<\/(?P<NamespaceIdentifier>NAMESPACE):(?P<MethodIdentifier>[a-zA-Z0-9\\.]+)\s*>$/';
+	static public $SCAN_PATTERN_TEMPLATE_CLOSINGVIEWHELPERTAG = '/^<\/(?P<NamespaceIdentifier>NAMESPACE):(?P<MethodIdentifier>[a-zA-Z0-9\\.]+)\s*>$/';
 
 	/**
 	 * This regular expression splits the tag arguments into its parts
 	 *
 	 */
-	public static $SPLIT_PATTERN_TAGARGUMENTS = '/
+	static public $SPLIT_PATTERN_TAGARGUMENTS = '/
 		(?:                                              #
 			\s*                                          #
 			(?P<Argument>                                # The attribute name
@@ -111,14 +111,14 @@ class TemplateParser {
 	 * and closing CDATA.
 	 *
 	 */
-	public static $SCAN_PATTERN_CDATA = '/^<!\[CDATA\[(.*?)\]\]>$/s';
+	static public $SCAN_PATTERN_CDATA = '/^<!\[CDATA\[(.*?)\]\]>$/s';
 
 	/**
 	 * Pattern which splits the shorthand syntax into different tokens. The
 	 * "shorthand syntax" is everything like {...}
 	 *
 	 */
-	public static $SPLIT_PATTERN_SHORTHANDSYNTAX = '/
+	static public $SPLIT_PATTERN_SHORTHANDSYNTAX = '/
 		(
 			{                                # Start of shorthand syntax
 				(?:                          # Shorthand syntax is either composed of...
@@ -140,7 +140,7 @@ class TemplateParser {
 	 * THIS IS ALMOST THE SAME AS IN $SCAN_PATTERN_SHORTHANDSYNTAX_ARRAYS
 	 *
 	 */
-	public static $SCAN_PATTERN_SHORTHANDSYNTAX_OBJECTACCESSORS = '/
+	static public $SCAN_PATTERN_SHORTHANDSYNTAX_OBJECTACCESSORS = '/
 		^{                                                      # Start of shorthand syntax
 			                                                # A shorthand syntax is either...
 			(?P<Object>[a-zA-Z0-9\-_.]*)                                     # ... an object accessor
@@ -178,7 +178,7 @@ class TemplateParser {
 	 * THIS IS ALMOST THE SAME AS $SCAN_PATTERN_SHORTHANDSYNTAX_OBJECTACCESSORS
 	 *
 	 */
-	public static $SPLIT_PATTERN_SHORTHANDSYNTAX_VIEWHELPER = '/
+	static public $SPLIT_PATTERN_SHORTHANDSYNTAX_VIEWHELPER = '/
 
 		(?P<NamespaceIdentifier>[a-zA-Z0-9]+)       # Namespace prefix of ViewHelper (as in $SCAN_PATTERN_TEMPLATE_VIEWHELPERTAG)
 		:
@@ -208,7 +208,7 @@ class TemplateParser {
 	 * THIS IS ALMOST THE SAME AS IN SCAN_PATTERN_SHORTHANDSYNTAX_OBJECTACCESSORS
 	 *
 	 */
-	public static $SCAN_PATTERN_SHORTHANDSYNTAX_ARRAYS = '/^
+	static public $SCAN_PATTERN_SHORTHANDSYNTAX_ARRAYS = '/^
 		(?P<Recursion>                                  # Start the recursive part of the regular expression - describing the array syntax
 			{                                           # Each array needs to start with {
 				(?P<Array>                              # Start submatch
@@ -232,7 +232,7 @@ class TemplateParser {
 	 * pattern above.
 	 *
 	 */
-	public static $SPLIT_PATTERN_SHORTHANDSYNTAX_ARRAY_PARTS = '/
+	static public $SPLIT_PATTERN_SHORTHANDSYNTAX_ARRAY_PARTS = '/
 		(?P<ArrayPart>                                             # Start submatch
 			(?P<Key>[a-zA-Z0-9\-_]+)                               # The keys of the array
 			\s*:\s*                                                   # Key|Value delimiter :
@@ -252,7 +252,7 @@ class TemplateParser {
 	 * This pattern detects the default xml namespace
 	 *
 	 */
-	public static $SCAN_PATTERN_DEFAULT_XML_NAMESPACE = '/^http\:\/\/typo3\.org\/ns\/(?P<PhpNamespace>.+)$/s';
+	static public $SCAN_PATTERN_DEFAULT_XML_NAMESPACE = '/^http\:\/\/typo3\.org\/ns\/(?P<PhpNamespace>.+)$/s';
 
 	/**
 	 * Namespace identifiers and their component name prefix (Associative array).
@@ -328,7 +328,9 @@ class TemplateParser {
 	 * @throws Exception
 	 */
 	public function parse($templateString) {
-		if (!is_string($templateString)) throw new \TYPO3\Fluid\Core\Parser\Exception('Parse requires a template string as argument, ' . gettype($templateString) . ' given.', 1224237899);
+		if (!is_string($templateString)) {
+			throw new \TYPO3\Fluid\Core\Parser\Exception('Parse requires a template string as argument, ' . gettype($templateString) . ' given.', 1224237899);
+		}
 
 		$this->reset();
 
@@ -523,7 +525,7 @@ class TemplateParser {
 	 * Throw an exception if there are arguments which were not registered
 	 * before.
 	 *
-	 * @param array $expectedArguments Array of TYPO3\Fluid\Core\ViewHelper\ArgumentDefinition of all expected arguments
+	 * @param array $expectedArguments Array of \TYPO3\Fluid\Core\ViewHelper\ArgumentDefinition of all expected arguments
 	 * @param array $actualArguments Actual arguments
 	 * @throws \TYPO3\Fluid\Core\Parser\Exception
 	 */
@@ -543,7 +545,7 @@ class TemplateParser {
 	/**
 	 * Throw an exception if required arguments are missing
 	 *
-	 * @param array $expectedArguments Array of TYPO3\Fluid\Core\ViewHelper\ArgumentDefinition of all expected arguments
+	 * @param array $expectedArguments Array of \TYPO3\Fluid\Core\ViewHelper\ArgumentDefinition of all expected arguments
 	 * @param array $actualArguments Actual arguments
 	 * @throws \TYPO3\Fluid\Core\Parser\Exception
 	 */
@@ -807,7 +809,7 @@ class TemplateParser {
 		foreach ($sections as $section) {
 			$matchedVariables = array();
 			if (preg_match(self::$SCAN_PATTERN_SHORTHANDSYNTAX_OBJECTACCESSORS, $section, $matchedVariables) > 0) {
-				$this->objectAccessorHandler($state, $matchedVariables['Object'], $matchedVariables['Delimiter'], (isset($matchedVariables['ViewHelper'])?$matchedVariables['ViewHelper']:''), (isset($matchedVariables['AdditionalViewHelpers'])?$matchedVariables['AdditionalViewHelpers']:''));
+				$this->objectAccessorHandler($state, $matchedVariables['Object'], $matchedVariables['Delimiter'], (isset($matchedVariables['ViewHelper']) ? $matchedVariables['ViewHelper'] : ''), (isset($matchedVariables['AdditionalViewHelpers']) ? $matchedVariables['AdditionalViewHelpers'] : ''));
 			} elseif ($context === self::CONTEXT_INSIDE_VIEWHELPER_ARGUMENTS && preg_match(self::$SCAN_PATTERN_SHORTHANDSYNTAX_ARRAYS, $section, $matchedVariables) > 0) {
 					// We only match arrays if we are INSIDE viewhelper arguments
 				$this->arrayHandler($state, $matchedVariables['Array']);
@@ -843,7 +845,7 @@ class TemplateParser {
 	 *
 	 * @param string $arrayText Array text
 	 * @return SyntaxTree\ArrayNode the array node built up
-	 * @throws Exception
+	 * @throws \TYPO3\Fluid\Core\Parser\Exception
 	 */
 	protected function recursiveArrayHandler($arrayText) {
 		$matches = array();
@@ -883,6 +885,6 @@ class TemplateParser {
 
 		$state->getNodeFromStack()->addChildNode($node);
 	}
-
 }
+
 ?>

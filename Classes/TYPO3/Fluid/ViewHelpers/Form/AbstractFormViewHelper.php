@@ -11,13 +11,11 @@ namespace TYPO3\Fluid\ViewHelpers\Form;
  * The TYPO3 project - inspiring people to share!                         *
  *                                                                        */
 
-
 /**
  * Abstract Form View Helper. Bundles functionality related to direct property access of objects in other Form ViewHelpers.
  *
  * If you set the "property" attribute to the name of the property to resolve from the object, this class will
  * automatically set the name and value of a form element.
- *
  */
 abstract class AbstractFormViewHelper extends \TYPO3\Fluid\Core\ViewHelper\AbstractTagBasedViewHelper {
 
@@ -66,7 +64,7 @@ abstract class AbstractFormViewHelper extends \TYPO3\Fluid\Core\ViewHelper\Abstr
 	 *
 	 * @param object $object Object to create the identity field for
 	 * @param string $name Name
-	 * @return string A hidden field containing the Identity (UUID in Flow, uid in Extbase) of the given object or NULL if the object is unknown to the persistence framework
+	 * @return string A hidden field containing the Identity (UUID in TYPO3 Flow, uid in Extbase) of the given object or NULL if the object is unknown to the persistence framework
 	 * @see \TYPO3\Flow\Mvc\Controller\Argument::setValue()
 	 */
 	protected function renderHiddenIdentityField($object, $name) {

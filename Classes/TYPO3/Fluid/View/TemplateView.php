@@ -11,7 +11,6 @@ namespace TYPO3\Fluid\View;
  * The TYPO3 project - inspiring people to share!                         *
  *                                                                        */
 
-
 /**
  * The main template view. Should be used as view if you want Fluid Templating
  *
@@ -21,66 +20,77 @@ class TemplateView extends \TYPO3\Fluid\View\AbstractTemplateView {
 
 	/**
 	 * Pattern to be resolved for "@templateRoot" in the other patterns.
+	 *
 	 * @var string
 	 */
 	protected $templateRootPathPattern = '@packageResourcesPath/Private/Templates';
 
 	/**
 	 * Pattern to be resolved for "@partialRoot" in the other patterns.
+	 *
 	 * @var string
 	 */
 	protected $partialRootPathPattern = '@packageResourcesPath/Private/Partials';
 
 	/**
 	 * Pattern to be resolved for "@layoutRoot" in the other patterns.
+	 *
 	 * @var string
 	 */
 	protected $layoutRootPathPattern = '@packageResourcesPath/Private/Layouts';
 
 	/**
 	 * Path to the template root. If NULL, then $this->templateRootPathPattern will be used.
+	 *
 	 * @var string
 	 */
 	protected $templateRootPath = NULL;
 
 	/**
 	 * Path to the partial root. If NULL, then $this->partialRootPathPattern will be used.
+	 *
 	 * @var string
 	 */
 	protected $partialRootPath = NULL;
 
 	/**
 	 * Path to the layout root. If NULL, then $this->layoutRootPathPattern will be used.
+	 *
 	 * @var string
 	 */
 	protected $layoutRootPath = NULL;
 
 	/**
 	 * File pattern for resolving the template file
+	 *
 	 * @var string
 	 */
 	protected $templatePathAndFilenamePattern = '@templateRoot/@subpackage/@controller/@action.@format';
 
 	/**
 	 * Directory pattern for global partials. Not part of the public API, should not be changed for now.
+	 *
 	 * @var string
 	 */
 	private $partialPathAndFilenamePattern = '@partialRoot/@subpackage/@partial.@format';
 
 	/**
 	 * File pattern for resolving the layout
+	 *
 	 * @var string
 	 */
 	protected $layoutPathAndFilenamePattern = '@layoutRoot/@layout.@format';
 
 	/**
 	 * Path and filename of the template file. If set,  overrides the templatePathAndFilenamePattern
+	 *
 	 * @var string
 	 */
 	protected $templatePathAndFilename = NULL;
 
 	/**
 	 * Path and filename of the layout file. If set, overrides the layoutPathAndFilenamePattern
+	 *
 	 * @var string
 	 */
 	protected $layoutPathAndFilename = NULL;
@@ -127,7 +137,7 @@ class TemplateView extends \TYPO3\Fluid\View\AbstractTemplateView {
 		}
 	}
 
-		/**
+	/**
 	 * Set the root path to the templates.
 	 * If set, overrides the one determined from $this->templateRootPathPattern
 	 *
@@ -150,7 +160,7 @@ class TemplateView extends \TYPO3\Fluid\View\AbstractTemplateView {
 		$templatePathAndFilename = $this->getTemplatePathAndFilename($actionName);
 		if ($actionName === NULL) {
 			$actionName = $this->controllerContext->getRequest()->getControllerActionName();
-		};
+		}
 		$prefix = 'action_' . $actionName;
 		return $this->createIdentifierForFile($templatePathAndFilename, $prefix);
 	}
@@ -186,18 +196,15 @@ class TemplateView extends \TYPO3\Fluid\View\AbstractTemplateView {
 		}
 		if ($actionName === NULL) {
 			$actionName = $this->controllerContext->getRequest()->getControllerActionName();
-		};
+		}
 		$actionName = ucfirst($actionName);
 
 		$paths = $this->expandGenericPathPattern($this->templatePathAndFilenamePattern, FALSE, FALSE);
 		foreach ($paths as &$templatePathAndFilename) {
-			// These tokens are replaced by the Backporter for the graceful fallback in version 4.
-			// TOKEN-1
 			$templatePathAndFilename = str_replace('@action', $actionName, $templatePathAndFilename);
 			if (file_exists($templatePathAndFilename)) {
-				// TOKEN-2
 				return $templatePathAndFilename;
-			} // TOKEN-3
+			}
 		}
 		throw new \TYPO3\Fluid\View\Exception\InvalidTemplateResourceException('Template could not be loaded. I tried "' . implode('", "', $paths) . '"', 1225709595);
 	}
@@ -214,7 +221,6 @@ class TemplateView extends \TYPO3\Fluid\View\AbstractTemplateView {
 		$prefix = 'layout_' . $layoutName;
 		return $this->createIdentifierForFile($layoutPathAndFilename, $prefix);
 	}
-
 
 	/**
 	 * Resolve the path and file name of the layout file, based on
@@ -256,12 +262,10 @@ class TemplateView extends \TYPO3\Fluid\View\AbstractTemplateView {
 		$paths = $this->expandGenericPathPattern($this->layoutPathAndFilenamePattern, TRUE, TRUE);
 		$layoutName = ucfirst($layoutName);
 		foreach ($paths as &$layoutPathAndFilename) {
-			// These tokens are replaced by the Backporter for the graceful fallback in version 4.
-			// TOKEN-LAYOUT-1
 			$layoutPathAndFilename = str_replace('@layout', $layoutName, $layoutPathAndFilename);
 			if (file_exists($layoutPathAndFilename)) {
 				return $layoutPathAndFilename;
-			} // TOKEN-LAYOUT-3
+			}
 		}
 		throw new \TYPO3\Fluid\View\Exception\InvalidTemplateResourceException('The template files "' . implode('", "', $paths) . '" could not be loaded.', 1225709595);
 	}
@@ -318,7 +322,7 @@ class TemplateView extends \TYPO3\Fluid\View\AbstractTemplateView {
 	 *
 	 * @return string Path to template root directory
 	 */
-	protected function getTemplateRootPath() {
+	public function getTemplateRootPath() {
 		if ($this->templateRootPath !== NULL) {
 			return $this->templateRootPath;
 		} else {
@@ -424,14 +428,13 @@ class TemplateView extends \TYPO3\Fluid\View\AbstractTemplateView {
 			} else {
 				$temporaryPattern = str_replace('//', '/', str_replace('@controller', '', $temporaryPattern));
 			}
-			$temporaryPattern = str_replace('@subpackage', implode('/', ($i<0 ? $subpackageParts : array_slice($subpackageParts, $i))), $temporaryPattern);
+			$temporaryPattern = str_replace('@subpackage', implode('/', ($i < 0 ? $subpackageParts : array_slice($subpackageParts, $i))), $temporaryPattern);
 
 			$results[] = \TYPO3\Flow\Utility\Files::getUnixStylePath(str_replace('@format', $this->controllerContext->getRequest()->getFormat(), $temporaryPattern));
 			if ($formatIsOptional) {
-				$results[] =  \TYPO3\Flow\Utility\Files::getUnixStylePath(str_replace('.@format', '', $temporaryPattern));
+				$results[] = \TYPO3\Flow\Utility\Files::getUnixStylePath(str_replace('.@format', '', $temporaryPattern));
 			}
-
-		} while($i++ < count($subpackageParts) && $bubbleControllerAndSubpackage);
+		} while ($i++ < count($subpackageParts) && $bubbleControllerAndSubpackage);
 
 		return $results;
 	}

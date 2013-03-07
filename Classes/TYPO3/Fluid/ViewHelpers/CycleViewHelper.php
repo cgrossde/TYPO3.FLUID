@@ -11,7 +11,6 @@ namespace TYPO3\Fluid\ViewHelpers;
  * The TYPO3 project - inspiring people to share!                         *
  *                                                                        */
 
-
 /**
  * This ViewHelper cycles through the specified values.
  * This can be often used to specify CSS classes for example.
@@ -49,18 +48,22 @@ namespace TYPO3\Fluid\ViewHelpers;
 class CycleViewHelper extends \TYPO3\Fluid\Core\ViewHelper\AbstractViewHelper {
 
 	/**
-	 * the values to be iterated through
+	 * The values to be iterated through
+	 *
 	 * @var array|\SplObjectStorage
 	 */
 	protected $values = NULL;
 
 	/**
-	 * current values index
+	 * Current values index
+	 *
 	 * @var integer
 	 */
 	protected $currentCycleIndex = NULL;
 
 	/**
+	 * Renders cycle view helper
+	 *
 	 * @param array $values The array or object implementing \ArrayAccess (for example \SplObjectStorage) to iterated over
 	 * @param string $as The name of the iteration variable
 	 * @return string Rendered result
@@ -90,7 +93,7 @@ class CycleViewHelper extends \TYPO3\Fluid\Core\ViewHelper\AbstractViewHelper {
 	/**
 	 * Sets this->values to the current values argument and resets $this->currentCycleIndex.
 	 *
-	 * @param array $values The array or \SplObjectStorage to be stored in $this->values
+	 * @param array|\Traversable $values The array or \SplObjectStorage to be stored in $this->values
 	 * @return void
 	 * @throws \TYPO3\Fluid\Core\ViewHelper\Exception
 	 */

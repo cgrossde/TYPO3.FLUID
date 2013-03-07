@@ -19,7 +19,6 @@ use org\bovigo\vfs\vfsStreamDirectory;
 
 /**
  * Testcase for the TemplateView
- *
  */
 class TemplateViewTest extends \TYPO3\Flow\Tests\UnitTestCase {
 
@@ -91,7 +90,7 @@ class TemplateViewTest extends \TYPO3\Flow\Tests\UnitTestCase {
 			'Resources/Private/Templates/MySubPackage/@action.html',
 			'Resources/Private/Templates/MySubPackage/@action',
 			'Resources/Private/Templates/@action.html',
-			'Resources/Private/Templates/@action',
+			'Resources/Private/Templates/@action'
 		);
 		$this->assertEquals($expected, $actual);
 	}
@@ -99,10 +98,10 @@ class TemplateViewTest extends \TYPO3\Flow\Tests\UnitTestCase {
 	/**
 	 * Helper to build mock controller context needed to test expandGenericPathPattern.
 	 *
-	 * @param $packageKey
-	 * @param $subPackageKey
-	 * @param $controllerClassName
-	 * @param $format
+	 * @param string $packageKey
+	 * @param string $subPackageKey
+	 * @param string $controllerClassName
+	 * @param string $format
 	 * @return \PHPUnit_Framework_MockObject_MockObject
 	 */
 	protected function setupMockControllerContextForPathResolving($packageKey, $subPackageKey, $controllerName, $format) {
@@ -179,8 +178,8 @@ class TemplateViewTest extends \TYPO3\Flow\Tests\UnitTestCase {
 		\file_put_contents('vfs://MyTemplates/MyCoolAction.html', 'contentsOfMyCoolAction');
 
 		$paths = array(
-			 'vfs://NonExistantDir/UnknowFile.html',
-			 'vfs://MyTemplates/@action.html'
+			'vfs://NonExistantDir/UnknowFile.html',
+			'vfs://MyTemplates/@action.html'
 		);
 
 		$templateView = $this->getAccessibleMock('TYPO3\Fluid\View\TemplateView', array('expandGenericPathPattern'), array(), '', FALSE);

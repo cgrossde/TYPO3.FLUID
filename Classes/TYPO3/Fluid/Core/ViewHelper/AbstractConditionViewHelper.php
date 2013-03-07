@@ -36,8 +36,9 @@ use TYPO3\Flow\Annotations as Flow;
 abstract class AbstractConditionViewHelper extends \TYPO3\Fluid\Core\ViewHelper\AbstractViewHelper implements \TYPO3\Fluid\Core\ViewHelper\Facets\ChildNodeAccessInterface, \TYPO3\Fluid\Core\ViewHelper\Facets\CompilableInterface {
 
 	/**
-	 * An array of \TYPO3\Fluid\Core\Parser\SyntaxTree\AbstractNode
-	 * @var array
+	 * An array containing child nodes
+	 *
+	 * @var array<\TYPO3\Fluid\Core\Parser\SyntaxTree\AbstractNode>
 	 */
 	private $childNodes = array();
 
@@ -53,7 +54,6 @@ abstract class AbstractConditionViewHelper extends \TYPO3\Fluid\Core\ViewHelper\
 
 	/**
 	 * Initializes the "then" and "else" arguments
-	 *
 	 */
 	public function __construct() {
 		$this->registerArgument('then', 'mixed', 'Value to be returned if the condition if met.', FALSE);

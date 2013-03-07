@@ -11,10 +11,9 @@ namespace TYPO3\Fluid\ViewHelpers;
  * The TYPO3 project - inspiring people to share!                         *
  *                                                                        */
 
-
 /**
  * This view helper implements an if/else condition.
- * Check TYPO3\Fluid\Core\Parser\SyntaxTree\ViewHelperNode::convertArgumentValue() to see how boolean arguments are evaluated
+ * Check \TYPO3\Fluid\Core\Parser\SyntaxTree\ViewHelperNode::convertArgumentValue() to see how boolean arguments are evaluated
  *
  * **Conditions:**
  *
@@ -82,13 +81,13 @@ namespace TYPO3\Fluid\ViewHelpers;
  * Otherwise, everything the value of the "else"-attribute is displayed.
  * </output>
  *
- * @see TYPO3\Fluid\Core\Parser\SyntaxTree\ViewHelperNode::convertArgumentValue()
+ * @see \TYPO3\Fluid\Core\Parser\SyntaxTree\ViewHelperNode::convertArgumentValue()
  * @api
  */
 class IfViewHelper extends \TYPO3\Fluid\Core\ViewHelper\AbstractConditionViewHelper {
 
 	/**
-	 * renders <f:then> child if $condition is true, otherwise renders <f:else> child.
+	 * Renders <f:then> child if $condition is true, otherwise renders <f:else> child.
 	 *
 	 * @param boolean $condition View helper condition
 	 * @return string the rendered string
@@ -102,4 +101,5 @@ class IfViewHelper extends \TYPO3\Fluid\Core\ViewHelper\AbstractConditionViewHel
 		}
 	}
 }
+
 ?>
